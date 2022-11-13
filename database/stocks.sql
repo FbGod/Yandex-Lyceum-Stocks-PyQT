@@ -1,0 +1,26 @@
+--
+-- Файл сгенерирован с помощью SQLiteStudio v3.3.3 в Ср ноя 2 20:40:20 2022
+--
+-- Использованная кодировка текста: System
+--
+PRAGMA foreign_keys = off;
+BEGIN TRANSACTION;
+
+-- Таблица: Currency
+DROP TABLE IF EXISTS Currency;
+CREATE TABLE Currency (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, CurrencyFull TEXT UNIQUE NOT NULL, CurrencyShort TEXT UNIQUE NOT NULL);
+
+-- Таблица: Deal
+DROP TABLE IF EXISTS Deal;
+CREATE TABLE Deal (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, TypeID INTEGER REFERENCES DealType (id), PlaceID INTEGER REFERENCES DealPlace (id), CurrencyID INTEGER REFERENCES Currency (id), Number TEXT, Tiker TEXT, "Order" TEXT, Quantity INTEGER, Price DOUBLE, TotalCost DOUBLE, Trader TEXT, Commision DOUBLE);
+
+-- Таблица: DealPlace
+DROP TABLE IF EXISTS DealPlace;
+CREATE TABLE DealPlace (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, PlaceFull TEXT UNIQUE NOT NULL, PlaceShort TEXT UNIQUE NOT NULL);
+
+-- Таблица: DealType
+DROP TABLE IF EXISTS DealType;
+CREATE TABLE DealType (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL, Type TEXT NOT NULL UNIQUE);
+
+COMMIT TRANSACTION;
+PRAGMA foreign_keys = on;
