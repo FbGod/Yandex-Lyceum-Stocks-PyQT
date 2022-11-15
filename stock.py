@@ -125,10 +125,6 @@ def connect_to_currency(request='print', *args):
         con.commit()
 
 
-
-
-
-
 class MainWindow(QMainWindow):
 
     def __init__(self, *args, **kwargs):
@@ -403,7 +399,6 @@ class MainWindow(QMainWindow):
         connect_to_deal('update', type_id, place_id, currency_id, deal_number, ticker, order, quantity, price, totalcost, trader, comission, index_to_upd)
         self.add_deal_diag.close()
         self.update_deal_table()
-
 
     """ Currency """
 
@@ -721,7 +716,7 @@ class MainWindow(QMainWindow):
 
     def create_line_chart(self, name):
         stock_name = name
-        data = get_stock_data(stock_name, 14)
+        data = get_stock_data(stock_name, 30)
         stockDate = data.index.tolist()
         open = data['Open'].tolist()
         close = data['Close'].tolist()
