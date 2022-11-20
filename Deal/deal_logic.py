@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QLineEdit, QFormLayout, QLabel, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QDialog, QLineEdit, QFormLayout, QLabel, QPushButton, QMessageBox, QComboBox
 
 import database
 
@@ -6,10 +6,22 @@ import database
 class ActionDeal:
 
     def add_deal(self):
+        items_type = database.connect_to_deal_type('print')
+        items_place = database.connect_to_deal_place('print')
+        items_currency = database.connect_to_currency('print')
+
         self.add_deal_diag = QDialog()
-        self.type_id = QLineEdit()
-        self.place_id = QLineEdit()
-        self.currency_id = QLineEdit()
+
+        self.type_id = QComboBox()
+        self.type_id.addItems([str(elem[1]) + ' -> id=' + str(elem[0]) for elem in items_type])
+
+        self.place_id = QComboBox()
+        self.place_id.addItems([str(elem[1]) + ' -> id=' + str(elem[0]) for elem in items_place])
+
+        self.currency_id = QComboBox()
+        self.currency_id.addItems([str(elem[1]) + ' -> id=' + str(elem[0]) for elem in items_currency])
+
+
         self.deal_number = QLineEdit()
         self.ticker = QLineEdit()
         self.order = QLineEdit()
@@ -59,10 +71,15 @@ class ActionDeal:
         self.add_deal_diag.exec_()
 
     def save_deal(self):
-        type_id = int(self.type_id.text())
+        items_type = database.connect_to_deal_type('print')
+        items_place = database.connect_to_deal_place('print')
+        items_currency = database.connect_to_currency('print')
 
-        place_id = int(self.place_id.text())
-        currency_id = int(self.currency_id.text())
+        type_id = int(items_type[int(self.type_id.currentIndex())][0])
+
+        place_id = int(items_place[int(self.place_id.currentIndex())][0])
+        currency_id = int(items_currency[int(self.currency_id.currentIndex())][0])
+
         deal_number = self.deal_number.text()
         ticker = self.ticker.text()
         order = self.order.text()
@@ -95,6 +112,12 @@ class ActionDeal:
 
     def update_deal(self):
         try:
+            items_type = database.connect_to_deal_type('print')
+            items_place = database.connect_to_deal_place('print')
+            items_currency = database.connect_to_currency('print')
+
+            print(items_type)
+
             index = self.db_space.currentIndex()
             new_index = self.db_space.model().index(index.row(), 0)
             index_to_upd = self.db_space.model().data(new_index)
@@ -102,14 +125,23 @@ class ActionDeal:
             items = items1[0]
             print(items)
             self.add_deal_diag = QDialog()
-            self.type_id = QLineEdit()
-            self.type_id.setText(str(items[1]))
+            self.type_id = QComboBox()
+            self.type_id.addItems([str(elem[1]) + ' -> id=' + str(elem[0]) for elem in items_type])
+            for elem in items_type:
+                if elem[0] == items[1]:
+                    self.type_id.setCurrentIndex(items_type.index(elem))
 
-            self.place_id = QLineEdit()
-            self.place_id.setText(str(items[2]))
+            self.place_id = QComboBox()
+            self.place_id.addItems([str(elem[1]) + ' -> id=' + str(elem[0]) for elem in items_place])
+            for elem in items_place:
+                if elem[0] == items[2]:
+                    self.place_id.setCurrentIndex(items_place.index(elem))
 
-            self.currency_id = QLineEdit()
-            self.currency_id.setText(str(items[3]))
+            self.currency_id = QComboBox()
+            self.currency_id.addItems([str(elem[1]) + ' -> id=' + str(elem[0]) for elem in items_currency])
+            for elem in items_currency:
+                if elem[0] == items[3]:
+                    self.currency_id.setCurrentIndex(items_currency.index(elem))
 
             self.deal_number = QLineEdit()
             self.deal_number.setText(str(items[4]))
@@ -176,14 +208,19 @@ class ActionDeal:
             print('Ошибка при обновлении: ', e)
 
     def updt_deal(self):
+        items_type = database.connect_to_deal_type('print')
+        items_place = database.connect_to_deal_place('print')
+        items_currency = database.connect_to_currency('print')
+
         index = self.db_space.currentIndex()
         new_index = self.db_space.model().index(index.row(), 0)
         index_to_upd = self.db_space.model().data(new_index)
 
-        type_id = int(self.type_id.text())
+        type_id = int(items_type[int(self.type_id.currentIndex())][0])
 
-        place_id = int(self.place_id.text())
-        currency_id = int(self.currency_id.text())
+        place_id = int(items_place[int(self.place_id.currentIndex())][0])
+        currency_id = int(items_currency[int(self.currency_id.currentIndex())][0])
+
         deal_number = self.deal_number.text()
         ticker = self.ticker.text()
         order = self.order.text()
