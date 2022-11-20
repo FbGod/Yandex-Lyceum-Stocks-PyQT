@@ -41,19 +41,22 @@ class ActionType:
         self.update_deal_table()
 
     def type_btn_update(self):
-        self.add_type_diag = QDialog()
-        self.add_type_diag_type = QLineEdit()
-        self.add_type_diag.setGeometry(300, 75, 300, 75)
-        self.add_type_diag.setWindowTitle('Добавить тип сделки')
-        txt = QLabel('Тип сделки')
-        layout = QFormLayout()
-        layout.addRow(txt)
-        layout.addRow(self.add_type_diag_type)
-        layout.addRow(button_save_type := QPushButton('Ok'))
-        self.add_type_diag.setLayout(layout)
-        button_save_type.clicked.connect(self.update_type)
-        self.add_type_diag.show()
-        self.add_type_diag.exec_()
+        try:
+            self.add_type_diag = QDialog()
+            self.add_type_diag_type = QLineEdit()
+            self.add_type_diag.setGeometry(300, 75, 300, 75)
+            self.add_type_diag.setWindowTitle('Добавить тип сделки')
+            txt = QLabel('Тип сделки')
+            layout = QFormLayout()
+            layout.addRow(txt)
+            layout.addRow(self.add_type_diag_type)
+            layout.addRow(button_save_type := QPushButton('Ok'))
+            self.add_type_diag.setLayout(layout)
+            button_save_type.clicked.connect(self.update_type)
+            self.add_type_diag.show()
+            self.add_type_diag.exec_()
+        except Exception as e:
+            print('Ошибка при обновлении: ', e)
 
     def update_type(self):
         index = self.type_table.currentIndex()

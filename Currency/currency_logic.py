@@ -46,32 +46,34 @@ class ActionCurrency:
         self.update_deal_table()
 
     def currency_btn_update(self):
-        self.add_currency_diag = QDialog()
-        self.add_currency_diag_currency_long = QLineEdit()
-        self.add_currency_diag_currency_sort = QLineEdit()
-        self.add_currency_diag.setGeometry(300, 150, 300, 150)
-        self.add_currency_diag.setWindowTitle('Изменить валюту')
-        long_txt = QLabel('Полное наименование валюты')
-        short_txt = QLabel('Короткое наименование валюты')
-        layout = QFormLayout()
-        layout.addRow(long_txt)
-        layout.addRow(self.add_currency_diag_currency_long)
-        layout.addRow(short_txt)
-        layout.addRow(self.add_currency_diag_currency_sort)
-        layout.addRow(button_save_currency := QPushButton('Ok'))
-        self.add_currency_diag.setLayout(layout)
-        button_save_currency.clicked.connect(self.update_currency)
-        self.add_currency_diag.show()
-        self.add_currency_diag.exec_()
+        try:
+            self.add_currency_diag = QDialog()
+            self.add_currency_diag_currency_long = QLineEdit()
+            self.add_currency_diag_currency_sort = QLineEdit()
+            self.add_currency_diag.setGeometry(300, 150, 300, 150)
+            self.add_currency_diag.setWindowTitle('Изменить валюту')
+            long_txt = QLabel('Полное наименование валюты')
+            short_txt = QLabel('Короткое наименование валюты')
+            layout = QFormLayout()
+            layout.addRow(long_txt)
+            layout.addRow(self.add_currency_diag_currency_long)
+            layout.addRow(short_txt)
+            layout.addRow(self.add_currency_diag_currency_sort)
+            layout.addRow(button_save_currency := QPushButton('Ok'))
+            self.add_currency_diag.setLayout(layout)
+            button_save_currency.clicked.connect(self.update_currency)
+            self.add_currency_diag.show()
+            self.add_currency_diag.exec_()
+        except Exception as e:
+            print('Ошибка при обновлении: ', e)
+
 
     def update_currency(self):
         index = self.currency_table.currentIndex()
         new_index = self.currency_table.model().index(index.row(), 0)
         index_to_upd = self.currency_table.model().data(new_index)
-        print(index_to_upd)
         new = [self.add_currency_diag_currency_long.text(), self.add_currency_diag_currency_sort.text()]
         database.connect_to_currency('update', index_to_upd, new)
         self.add_currency_diag.close()
         self.update_table_currency()
         self.update_deal_table()
-
